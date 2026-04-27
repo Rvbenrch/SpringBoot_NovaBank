@@ -21,7 +21,7 @@ public class Usuario {
     @Column(nullable = false, length = 200)
     private String password;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "rol_id", nullable = false)
     private Rol rol;
 }
