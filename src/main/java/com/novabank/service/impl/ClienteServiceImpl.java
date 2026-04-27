@@ -1,5 +1,7 @@
 package com.novabank.service.impl;
 
+import com.novabank.exception.RecursoNoEncontradoException;
+import com.novabank.exception.ValidacionException;
 import com.novabank.model.Cliente;
 import com.novabank.repository.ClienteRepository;
 import com.novabank.service.ClienteService;
@@ -20,11 +22,11 @@ public class ClienteServiceImpl implements ClienteService {
     public Cliente crearCliente(Cliente cliente) {
 
         if (clienteRepository.existsByEmail(cliente.getEmail())) {
-            throw new IllegalArgumentException("Ya existe un cliente con el email: " + cliente.getEmail());
+            throw new ValidacionException("Ya existe un cliente con el email: " + cliente.getEmail());
         }
 
         if (clienteRepository.existsByTelefono(cliente.getTelefono())) {
-            throw new IllegalArgumentException("Ya existe un cliente con el teléfono: " + cliente.getTelefono());
+            throw new ValidacionException("Ya existe un cliente con el teléfono: " + cliente.getTelefono());
         }
 
         log.info("Creando cliente con DNI {}", cliente.getDni());
@@ -34,13 +36,17 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public Cliente buscarPorId(Long id) {
         return clienteRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cliente no encontrado con id: " + id));
+                .orElseThrow(() ->
+                        new RecursoNoEncontradoException("Cliente no encontrado con id: " + id)
+                );
     }
 
     @Override
     public Cliente buscarPorDni(String dni) {
         return clienteRepository.findByDni(dni)
-                .orElseThrow(() -> new RuntimeException("Cliente no encontrado con DNI: " + dni));
+                .orElseThrow(() ->
+                        new RecursoNoEncontradoException("Cliente no encontrado con DNI: " + dni)
+                );
     }
 
     @Override
