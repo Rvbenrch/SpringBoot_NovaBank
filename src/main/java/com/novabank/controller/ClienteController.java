@@ -34,7 +34,7 @@ public class ClienteController {
 
     @GetMapping("/{id}")
     public ClienteDTO buscarPorId(@PathVariable Long id) {
-        Cliente cliente = clienteService.buscarPorId(id);
+        Cliente cliente = clienteService.buscarPorId(id); // ← corregido
         return ClienteMapper.toDTO(cliente);
     }
 
