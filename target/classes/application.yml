@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: novabank-api
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/novabank
+    username: postgres
+    password: 655057621
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+server:
+  port: 8081
+
+jwt:
+  secret: "ESTA_ES_UNA_CLAVE_SECRETA_DE_32_CARACTERES_MINIMO_1234"
+  expiration: 86400000   # 24 horas
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /api-docs
