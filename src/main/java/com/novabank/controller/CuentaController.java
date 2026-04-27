@@ -2,10 +2,12 @@ package com.novabank.controller;
 
 import com.novabank.dto.CuentaCreateDTO;
 import com.novabank.dto.CuentaDTO;
+import com.novabank.dto.TransferenciaRequest;
 import com.novabank.mapper.CuentaMapper;
 import com.novabank.model.Cuenta;
 import com.novabank.service.CuentaService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,5 +38,17 @@ public class CuentaController {
                 .stream()
                 .map(CuentaMapper::toDTO)
                 .toList();
+    }
+
+    @PostMapping("/transferir")
+    public ResponseEntity<String> transferir(@RequestBody TransferenciaRequest request) {
+
+        cuentaService.transferir(
+                request.getCuentaOrigenId(),
+                request.getCuentaDestinoId(),
+                request.getCantidad()
+        );
+
+        return ResponseEntity.ok("Transferencia realizada correctamente");
     }
 }

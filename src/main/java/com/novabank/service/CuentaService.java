@@ -15,6 +15,6 @@ public interface CuentaService {
     List<Cuenta> listarPorCliente(Long clienteId);
 
     Cuenta cargarCuentaConMovimientos(Long id);
-
+    void transferir(Long cuentaOrigenId, Long cuentaDestinoId, Double cantidad);
     boolean existeNumeroCuenta(String numeroCuenta);
 }
