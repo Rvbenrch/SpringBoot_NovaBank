@@ -3,17 +3,18 @@ package com.novabank.service;
 import com.novabank.model.Cuenta;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface CuentaService {
 
-    Cuenta crearCuenta(Cuenta cuenta);
+    Cuenta crearCuenta(Cuenta cuenta, Long clienteId);
 
-    Optional<Cuenta> buscarPorId(Long id);
+    Cuenta buscarPorId(Long id);
 
-    Optional<Cuenta> buscarPorNumeroCuenta(String numeroCuenta);
+    Cuenta buscarPorNumeroCuenta(String numeroCuenta);
 
-    List<Cuenta> listarCuentasPorCliente(Long clienteId);
+    List<Cuenta> listarPorCliente(Long clienteId);
 
-    Optional<Cuenta> cargarCuentaConMovimientos(Long id);
+    Cuenta cargarCuentaConMovimientos(Long id);
+
+    boolean existeNumeroCuenta(String numeroCuenta);
 }

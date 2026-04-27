@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -33,13 +32,15 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public Optional<Cliente> buscarPorId(Long id) {
-        return clienteRepository.findById(id);
+    public Cliente buscarPorId(Long id) {
+        return clienteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado con id: " + id));
     }
 
     @Override
-    public Optional<Cliente> buscarPorDni(String dni) {
-        return clienteRepository.findByDni(dni);
+    public Cliente buscarPorDni(String dni) {
+        return clienteRepository.findByDni(dni)
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado con DNI: " + dni));
     }
 
     @Override
