@@ -21,7 +21,6 @@ public class CuentaMapper {
     public static Cuenta toEntity(CuentaCreateDTO dto) {
         Cuenta cuenta = new Cuenta();
         cuenta.setNumeroCuenta(dto.getNumeroCuenta());
-        // El cliente se asigna en el servicio, no aquí
         return cuenta;
     }
 
