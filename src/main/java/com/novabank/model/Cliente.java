@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -36,6 +37,9 @@ public class Cliente {
 
     @Column(name = "fecha_creacion", updatable = false, nullable = false)
     private LocalDateTime fechaCreacion;
+
+    @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
+    private List<Cuenta> cuentas;
 
     @PrePersist
     protected void onCreate() {

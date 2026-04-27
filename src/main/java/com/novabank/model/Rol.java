@@ -2,6 +2,7 @@ package com.novabank.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.util.List;
 
 @Data
 @Builder
@@ -17,4 +18,7 @@ public class Rol {
 
     @Column(nullable = false, unique = true, length = 50)
     private String nombre;
+
+    @OneToMany(mappedBy = "rol", fetch = FetchType.LAZY)
+    private List<Usuario> usuarios;
 }
