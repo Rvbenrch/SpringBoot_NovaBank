@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,7 +26,7 @@ public class Cuenta {
     private String numeroCuenta;
 
     @Column(nullable = false)
-    private Double saldo;
+    private BigDecimal saldo;
 
     @Column(name = "fecha_creacion", updatable = false, nullable = false)
     private LocalDateTime fechaCreacion;
@@ -42,7 +44,7 @@ public class Cuenta {
             this.fechaCreacion = LocalDateTime.now();
         }
         if (this.saldo == null) {
-            this.saldo = 0.0;
+            this.saldo = BigDecimal.ZERO;
         }
     }
 }

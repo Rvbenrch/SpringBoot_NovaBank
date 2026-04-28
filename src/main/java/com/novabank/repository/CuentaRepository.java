@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface CuentaRepository extends JpaRepository<Cuenta, Long> {
     Optional<Cuenta> findByNumeroCuenta(String numeroCuenta);
     List<Cuenta> findByClienteId(Long clienteId);
-    // Cargar cuenta + movimientos en una sola consulta (JPQL)
-    @Query("SELECT c FROM Cuenta c LEFT JOIN FETCH c.movimientos WHERE c.id = :id")
-    Optional<Cuenta> findByIdWithMovimientos(@Param("id") Long id);
+
+    @Query("SELECT c FROM Cuenta c LEFT JOIN FETCH c.movimientos WHERE c.cliente.id = :clienteId")
+    List<Cuenta> findByClienteIdWithMovimientos(@Param("clienteId") Long clienteId);
 }

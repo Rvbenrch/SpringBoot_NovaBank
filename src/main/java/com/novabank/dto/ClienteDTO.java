@@ -2,6 +2,8 @@ package com.novabank.dto;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 public class ClienteDTO {
 
@@ -11,4 +13,6 @@ public class ClienteDTO {
     private String dni;
     private String email;
     private String telefono;
+    private LocalDateTime fechaCreacion;
+    private int numeroCuentas;
 }
