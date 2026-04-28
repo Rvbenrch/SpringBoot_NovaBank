@@ -1,6 +1,5 @@
 package com.novabank.mapper;
 
-import com.novabank.dto.MovimientoCreateDTO;
 import com.novabank.dto.MovimientoDTO;
 import com.novabank.model.Movimiento;
 

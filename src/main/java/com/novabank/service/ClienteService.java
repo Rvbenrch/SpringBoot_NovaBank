@@ -1,6 +1,5 @@
 package com.novabank.service;
 
-import com.novabank.dto.ClienteCreateDTO;
 import com.novabank.dto.ClienteDTO;
 
 import java.util.List;

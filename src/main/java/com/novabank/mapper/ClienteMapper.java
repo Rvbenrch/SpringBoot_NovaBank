@@ -1,33 +1,26 @@
 package com.novabank.mapper;
 
-import com.novabank.dto.ClienteCreateDTO;
 import com.novabank.dto.ClienteDTO;
+import com.novabank.dto.CuentaDTO;
 import com.novabank.model.Cliente;
+import com.novabank.model.Cuenta;
 
-public class ClienteMapper {
-
-    public static Cliente toEntity(ClienteCreateDTO dto) {
-        Cliente cliente = new Cliente();
-        cliente.setNombre(dto.getNombre());
-        cliente.setApellidos(dto.getApellidos());
-        cliente.setDni(dto.getDni());
-        cliente.setEmail(dto.getEmail());
-        cliente.setTelefono(dto.getTelefono());
-        return cliente;
+public class CuentaMapper {
+    public static CuentaDTO toDTO(Cuenta cuenta) {
+        CuentaDTO dto = new CuentaDTO();
+        dto.setId(cuenta.getId());
+        dto.setNumeroCuenta(cuenta.getNumeroCuenta());
+        dto.setSaldo(cuenta.getSaldo());
+        if (cuenta.getCliente() != null) {
+            dto.setClienteId(cuenta.getCliente().getId());
+        }
+        return dto;
     }
 
-    public static ClienteDTO toDTO(Cliente cliente) {
-        ClienteDTO dto = new ClienteDTO();
-        dto.setId(cliente.getId());
-        dto.setNombre(cliente.getNombre());
-        dto.setApellidos(cliente.getApellidos());
-        dto.setDni(cliente.getDni());
-        dto.setEmail(cliente.getEmail());
-        dto.setTelefono(cliente.getTelefono());
-        dto.setFechaCreacion(cliente.getFechaCreacion());
-        dto.setNumeroCuentas(
-                cliente.getCuentas() != null ? cliente.getCuentas().size() : 0
-        );
-        return dto;
+    public static Cuenta toEntity(CuentaDTO dto) {
+        Cuenta cuenta = new Cuenta();
+        cuenta.setNumeroCuenta(dto.getNumeroCuenta());
+        // El cliente se busca y asigna en el Service, no aquí.
+        return cuenta;
     }
 }

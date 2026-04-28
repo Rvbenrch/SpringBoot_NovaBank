@@ -1,6 +1,5 @@
 package com.novabank.service;
 
-import com.novabank.dto.CuentaCreateDTO;
 import com.novabank.dto.CuentaDTO;
 
 import java.util.List;
@@ -16,4 +15,5 @@ public interface CuentaService {
     List<CuentaDTO> listarCuentasPorCliente(Long clienteId);
 
     CuentaDTO obtenerCuentaConMovimientos(Long cuentaId);
+    CuentaConMovimientosDTO obtenerCuentasConMovimientos(Long id);
 }

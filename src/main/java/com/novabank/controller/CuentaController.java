@@ -1,6 +1,5 @@
 package com.novabank.controller;
 
-import com.novabank.dto.CuentaCreateDTO;
 import com.novabank.dto.CuentaDTO;
 import com.novabank.dto.TransferenciaDTO;
 import com.novabank.dto.OperacionDTO;
