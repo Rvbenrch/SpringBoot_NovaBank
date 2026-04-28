@@ -1,8 +1,10 @@
 package com.novabank.service.impl;
 
+import com.novabank.dto.ClienteCreateDTO;
 import com.novabank.dto.ClienteDTO;
 import com.novabank.exception.RecursoNoEncontradoException;
 import com.novabank.exception.ValidacionException;
+import com.novabank.mapper.ClienteMapper;
 import com.novabank.model.Cliente;
 import com.novabank.repository.ClienteRepository;
 import com.novabank.service.ClienteService;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -22,68 +25,45 @@ public class ClienteServiceImpl implements ClienteService {
     private final ClienteRepository clienteRepository;
 
     @Override
-    public Cliente crearCliente(Cliente cliente) {
+    public ClienteDTO crearCliente(ClienteCreateDTO dto) {
 
-        // Validación de DNI duplicado usando findByDni (no existsByDni)
-        if (clienteRepository.findByDni(cliente.getDni()).isPresent()) {
-            throw new ValidacionException("Ya existe un cliente con el DNI: " + cliente.getDni());
+        if (clienteRepository.findByDni(dto.getDni()).isPresent()) {
+            throw new ValidacionException("Ya existe un cliente con el DNI: " + dto.getDni());
         }
 
-        if (clienteRepository.existsByEmail(cliente.getEmail())) {
-            throw new ValidacionException("Ya existe un cliente con el email: " + cliente.getEmail());
+        if (clienteRepository.existsByEmail(dto.getEmail())) {
+            throw new ValidacionException("Ya existe un cliente con el email: " + dto.getEmail());
         }
 
-        if (clienteRepository.existsByTelefono(cliente.getTelefono())) {
-            throw new ValidacionException("Ya existe un cliente con el teléfono: " + cliente.getTelefono());
+        if (clienteRepository.existsByTelefono(dto.getTelefono())) {
+            throw new ValidacionException("Ya existe un cliente con el teléfono: " + dto.getTelefono());
         }
 
-        log.info("Creando cliente con DNI {}", cliente.getDni());
-        return clienteRepository.save(cliente);
+        Cliente cliente = ClienteMapper.toEntity(dto);
+        Cliente guardado = clienteRepository.save(cliente);
+
+        log.info("Cliente creado con id {}", guardado.getId());
+
+        return ClienteMapper.toDTO(guardado);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Cliente buscarPorId(Long id) {
-        return clienteRepository.findById(id)
+    public ClienteDTO obtenerCliente(Long id) {
+        Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() ->
                         new RecursoNoEncontradoException("Cliente no encontrado con id: " + id)
                 );
+
+        return ClienteMapper.toDTO(cliente);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Cliente buscarPorDni(String dni) {
-        return clienteRepository.findByDni(dni)
-                .orElseThrow(() ->
-                        new RecursoNoEncontradoException("Cliente no encontrado con DNI: " + dni)
-                );
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public boolean existeEmail(String email) {
-        return clienteRepository.existsByEmail(email);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public boolean existeTelefono(String telefono) {
-        return clienteRepository.existsByTelefono(telefono);
-    }
-
-    @Override
-    public ClienteDTO crearCliente(ClienteDTO dto) {
-        return null;
-    }
-
-    @Override
-    public ClienteDTO obtenerCliente(Long id) {
-        return null;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<Cliente> listarClientes() {
-        return clienteRepository.findAll();
+    public List<ClienteDTO> listarClientes() {
+        return clienteRepository.findAll()
+                .stream()
+                .map(ClienteMapper::toDTO)
+                .collect(Collectors.toList());
     }
 }

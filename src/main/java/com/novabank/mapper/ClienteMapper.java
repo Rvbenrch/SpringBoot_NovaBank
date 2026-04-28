@@ -6,17 +6,6 @@ import com.novabank.model.Cliente;
 
 public class ClienteMapper {
 
-    public static ClienteDTO toDTO(Cliente cliente) {
-        ClienteDTO dto = new ClienteDTO();
-        dto.setId(cliente.getId());
-        dto.setNombre(cliente.getNombre());
-        dto.setApellidos(cliente.getApellidos());
-        dto.setDni(cliente.getDni());
-        dto.setEmail(cliente.getEmail());
-        dto.setTelefono(cliente.getTelefono());
-        return dto;
-    }
-
     public static Cliente toEntity(ClienteCreateDTO dto) {
         Cliente cliente = new Cliente();
         cliente.setNombre(dto.getNombre());
@@ -25,5 +14,20 @@ public class ClienteMapper {
         cliente.setEmail(dto.getEmail());
         cliente.setTelefono(dto.getTelefono());
         return cliente;
+    }
+
+    public static ClienteDTO toDTO(Cliente cliente) {
+        ClienteDTO dto = new ClienteDTO();
+        dto.setId(cliente.getId());
+        dto.setNombre(cliente.getNombre());
+        dto.setApellidos(cliente.getApellidos());
+        dto.setDni(cliente.getDni());
+        dto.setEmail(cliente.getEmail());
+        dto.setTelefono(cliente.getTelefono());
+        dto.setFechaCreacion(cliente.getFechaCreacion());
+        dto.setNumeroCuentas(
+                cliente.getCuentas() != null ? cliente.getCuentas().size() : 0
+        );
+        return dto;
     }
 }
