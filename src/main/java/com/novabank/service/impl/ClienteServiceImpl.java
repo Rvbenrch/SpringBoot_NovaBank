@@ -1,6 +1,5 @@
 package com.novabank.service.impl;
 
-import com.novabank.dto.ClienteCreateDTO;
 import com.novabank.dto.ClienteDTO;
 import com.novabank.exception.RecursoNoEncontradoException;
 import com.novabank.exception.ValidacionException;

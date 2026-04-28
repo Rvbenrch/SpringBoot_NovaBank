@@ -1,6 +1,5 @@
 package com.novabank.service.impl;
 
-import com.novabank.dto.CuentaCreateDTO;
 import com.novabank.dto.CuentaDTO;
 import com.novabank.exception.RecursoNoEncontradoException;
 import com.novabank.exception.ValidacionException;
@@ -100,5 +99,10 @@ public class CuentaServiceImpl implements CuentaService {
                 );
 
         return CuentaMapper.toDTO(cuenta);
+    }
+
+    @Override
+    public CuentaConMovimientosDTO obtenerCuentasConMovimientos(Long id) {
+        return null;
     }
 }
