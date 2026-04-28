@@ -1,22 +1,21 @@
 package com.novabank.dto;
 
-import com.novabank.model.TipoMovimiento;
 import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.math.BigDecimal;
 
 @Data
-public class MovimientoCreateDTO {
+public class OperacionDTO {
 
-    @NotNull
-    private TipoMovimiento tipo;
+    @NotBlank
+    private String numeroCuenta;
 
     @NotNull
     @DecimalMin("0.01")
-    private BigDecimal cantidad;
+    private BigDecimal importe;
 
-    @NotNull
-    private Long cuentaId;
+    private String descripcion;
 }

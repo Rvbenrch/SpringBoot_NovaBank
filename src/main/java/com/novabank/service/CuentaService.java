@@ -1,20 +1,19 @@
 package com.novabank.service;
 
-import com.novabank.model.Cuenta;
+import com.novabank.dto.CuentaCreateDTO;
+import com.novabank.dto.CuentaDTO;
 
 import java.util.List;
 
 public interface CuentaService {
 
-    Cuenta crearCuenta(Cuenta cuenta, Long clienteId);
+    CuentaDTO crearCuenta(CuentaCreateDTO dto);
 
-    Cuenta buscarPorId(Long id);
+    CuentaDTO obtenerCuenta(Long id);
 
-    Cuenta buscarPorNumeroCuenta(String numeroCuenta);
+    CuentaDTO obtenerCuentaPorNumero(String numeroCuenta);
 
-    List<Cuenta> listarPorCliente(Long clienteId);
+    List<CuentaDTO> listarCuentasPorCliente(Long clienteId);
 
-    Cuenta cargarCuentaConMovimientos(Long id);
-    void transferir(Long cuentaOrigenId, Long cuentaDestinoId, Double cantidad);
-    boolean existeNumeroCuenta(String numeroCuenta);
+    CuentaDTO obtenerCuentaConMovimientos(Long cuentaId);
 }

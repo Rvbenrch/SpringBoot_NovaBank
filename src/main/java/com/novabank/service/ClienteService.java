@@ -1,20 +1,15 @@
 package com.novabank.service;
 
-import com.novabank.model.Cliente;
+import com.novabank.dto.ClienteCreateDTO;
+import com.novabank.dto.ClienteDTO;
 
 import java.util.List;
 
 public interface ClienteService {
 
-    Cliente crearCliente(Cliente cliente);
+    ClienteDTO crearCliente(ClienteCreateDTO dto);
 
-    Cliente buscarPorId(Long id);
+    ClienteDTO obtenerCliente(Long id);
 
-    Cliente buscarPorDni(String dni);
-
-    boolean existeEmail(String email);
-
-    boolean existeTelefono(String telefono);
-
-    List<Cliente> listarClientes();
+    List<ClienteDTO> listarClientes();
 }

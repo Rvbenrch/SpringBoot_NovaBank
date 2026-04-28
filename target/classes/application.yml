@@ -21,7 +21,7 @@ server:
   port: 8081
 
 jwt:
-  secret: "ESTA_ES_UNA_CLAVE_SECRETA_DE_32_CARACTERES_MINIMO_1234"
+  secret: "qwertyuiopasdfghjklzxcvbnm123456qwertyuiopasdfghjklzxcvbnm123456"
   expiration: 86400000   # 24 horas
 
 springdoc:

@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -28,7 +30,7 @@ public class Movimiento {
     private TipoMovimiento tipo;
 
     @Column(nullable = false)
-    private Double cantidad;
+    private BigDecimal cantidad;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime fecha;

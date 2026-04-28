@@ -2,10 +2,10 @@ package com.novabank.controller;
 
 import com.novabank.dto.ClienteCreateDTO;
 import com.novabank.dto.ClienteDTO;
-import com.novabank.mapper.ClienteMapper;
-import com.novabank.model.Cliente;
 import com.novabank.service.ClienteService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,29 +18,19 @@ public class ClienteController {
     private final ClienteService clienteService;
 
     @GetMapping
-    public List<ClienteDTO> listarClientes() {
-        return clienteService.listarClientes()
-                .stream()
-                .map(ClienteMapper::toDTO)
-                .toList();
+    public ResponseEntity<List<ClienteDTO>> listarClientes() {
+        return ResponseEntity.ok(clienteService.listarClientes());
     }
 
     @PostMapping
-    public ClienteDTO crearCliente(@RequestBody ClienteCreateDTO dto) {
-        Cliente cliente = ClienteMapper.toEntity(dto);
-        Cliente creado = clienteService.crearCliente(cliente);
-        return ClienteMapper.toDTO(creado);
+    public ResponseEntity<ClienteDTO> crearCliente(@Valid @RequestBody ClienteCreateDTO dto) {
+        ClienteDTO creado = clienteService.crearCliente(dto);
+        return ResponseEntity.ok(creado);
     }
 
     @GetMapping("/{id}")
-    public ClienteDTO buscarPorId(@PathVariable Long id) {
-        Cliente cliente = clienteService.buscarPorId(id); // ← corregido
-        return ClienteMapper.toDTO(cliente);
-    }
-
-    @GetMapping("/dni/{dni}")
-    public ClienteDTO buscarPorDni(@PathVariable String dni) {
-        Cliente cliente = clienteService.buscarPorDni(dni);
-        return ClienteMapper.toDTO(cliente);
+    public ResponseEntity<ClienteDTO> obtenerCliente(@PathVariable Long id) {
+        ClienteDTO cliente = clienteService.obtenerCliente(id);
+        return ResponseEntity.ok(cliente);
     }
 }
