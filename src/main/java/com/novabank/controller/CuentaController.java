@@ -2,10 +2,11 @@ package com.novabank.controller;
 
 import com.novabank.dto.CuentaCreateDTO;
 import com.novabank.dto.CuentaDTO;
-import com.novabank.dto.TransferenciaRequest;
-import com.novabank.mapper.CuentaMapper;
-import com.novabank.model.Cuenta;
+import com.novabank.dto.TransferenciaDTO;
+import com.novabank.dto.OperacionDTO;
 import com.novabank.service.CuentaService;
+import com.novabank.service.OperacionService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,37 +19,52 @@ import java.util.List;
 public class CuentaController {
 
     private final CuentaService cuentaService;
+    private final OperacionService operacionService;
 
+    // Crear cuenta
     @PostMapping
-    public CuentaDTO crearCuenta(@RequestBody CuentaCreateDTO dto) {
-        Cuenta cuenta = CuentaMapper.toEntity(dto);
-        Cuenta creada = cuentaService.crearCuenta(cuenta, dto.getClienteId());
-        return CuentaMapper.toDTO(creada);
+    public ResponseEntity<CuentaDTO> crearCuenta(@Valid @RequestBody CuentaCreateDTO dto) {
+        CuentaDTO creada = cuentaService.crearCuenta(dto);
+        return ResponseEntity.ok(creada);
     }
 
+    // Obtener cuenta por ID
     @GetMapping("/{id}")
-    public CuentaDTO buscarPorId(@PathVariable Long id) {
-        Cuenta cuenta = cuentaService.buscarPorId(id);
-        return CuentaMapper.toDTO(cuenta);
+    public ResponseEntity<CuentaDTO> obtenerCuenta(@PathVariable Long id) {
+        CuentaDTO cuenta = cuentaService.obtenerCuenta(id);
+        return ResponseEntity.ok(cuenta);
     }
 
+    // Listar cuentas por cliente
     @GetMapping("/cliente/{clienteId}")
-    public List<CuentaDTO> listarPorCliente(@PathVariable Long clienteId) {
-        return cuentaService.listarPorCliente(clienteId)
-                .stream()
-                .map(CuentaMapper::toDTO)
-                .toList();
+    public ResponseEntity<List<CuentaDTO>> listarPorCliente(@PathVariable Long clienteId) {
+        return ResponseEntity.ok(cuentaService.listarCuentasPorCliente(clienteId));
     }
 
-    @PostMapping("/transferir")
-    public ResponseEntity<String> transferir(@RequestBody TransferenciaRequest request) {
+    // Obtener cuenta con movimientos
+    @GetMapping("/{id}/movimientos")
+    public ResponseEntity<CuentaDTO> obtenerCuentaConMovimientos(@PathVariable Long id) {
+        return ResponseEntity.ok(cuentaService.obtenerCuentaConMovimientos(id));
+    }
 
-        cuentaService.transferir(
-                request.getCuentaOrigenId(),
-                request.getCuentaDestinoId(),
-                request.getCantidad()
-        );
+    // Depósito
+    @PostMapping("/deposito")
+    public ResponseEntity<String> realizarDeposito(@Valid @RequestBody OperacionDTO dto) {
+        operacionService.realizarDeposito(dto);
+        return ResponseEntity.ok("Depósito realizado correctamente");
+    }
 
+    // Retiro
+    @PostMapping("/retiro")
+    public ResponseEntity<String> realizarRetiro(@Valid @RequestBody OperacionDTO dto) {
+        operacionService.realizarRetiro(dto);
+        return ResponseEntity.ok("Retiro realizado correctamente");
+    }
+
+    // Transferencia
+    @PostMapping("/transferencia")
+    public ResponseEntity<String> realizarTransferencia(@Valid @RequestBody TransferenciaDTO dto) {
+        operacionService.realizarTransferencia(dto);
         return ResponseEntity.ok("Transferencia realizada correctamente");
     }
 }
