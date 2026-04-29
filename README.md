@@ -131,9 +131,13 @@ El proyecto sigue una arquitectura multicapa basada en los principios SOLID:
 
 ---
 # Información Importante
+
+---
 ## Autor
 Rubén Manuel Rodríguez Chamorro, estudiante de Ingeniería de la Salud, especializado en Bioinformática es el dueño y autor
 de este proyecto, realizado en la empresa NTT-DATA elaborado para el completar el plan formativo.
+
+---
 
 ---
 
