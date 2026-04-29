@@ -22,13 +22,6 @@ public class MovimientoMapper {
         return dto;
     }
 
-    public static Movimiento toEntity(MovimientoCreateDTO dto) {
-        Movimiento movimiento = new Movimiento();
-        movimiento.setTipo(dto.getTipo());
-        movimiento.setCantidad(dto.getCantidad());
-        return movimiento;
-    }
-
     public static List<MovimientoDTO> toDTOList(List<Movimiento> movimientos) {
         return movimientos.stream()
                 .map(MovimientoMapper::toDTO)

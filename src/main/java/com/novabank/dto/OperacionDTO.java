@@ -10,11 +10,11 @@ import java.math.BigDecimal;
 @Data
 public class OperacionDTO {
 
-    @NotBlank
+    @NotBlank(message = "El número de cuenta es obligatorio")
     private String numeroCuenta;
 
-    @NotNull
-    @DecimalMin("0.01")
+    @NotNull(message = "El importe es obligatorio")
+    @DecimalMin(value = "0.01", message = "El importe mínimo debe ser 0.01")
     private BigDecimal importe;
 
     private String descripcion;
