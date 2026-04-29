@@ -1,10 +1,8 @@
 package com.novabank.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -39,6 +37,8 @@ public class Cliente {
     private LocalDateTime fechaCreacion;
 
     @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private List<Cuenta> cuentas;
 
     @PrePersist
