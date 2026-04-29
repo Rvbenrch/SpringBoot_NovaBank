@@ -10,14 +10,14 @@ import java.math.BigDecimal;
 @Data
 public class TransferenciaDTO {
 
-    @NotBlank
+    @NotBlank(message = "La cuenta de origen es obligatoria")
     private String cuentaOrigen;
 
-    @NotBlank
+    @NotBlank(message = "La cuenta de destino es obligatoria")
     private String cuentaDestino;
 
-    @NotNull
-    @DecimalMin("0.01")
+    @NotNull(message = "El importe es obligatorio")
+    @DecimalMin(value = "0.01", message = "El importe mínimo debe ser 0.01")
     private BigDecimal importe;
 
     private String concepto;

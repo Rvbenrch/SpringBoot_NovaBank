@@ -24,16 +24,13 @@ public class ClienteServiceImpl implements ClienteService {
     private final ClienteRepository clienteRepository;
 
     @Override
-    public ClienteDTO crearCliente(ClienteCreateDTO dto) {
-
+    public ClienteDTO crearCliente(ClienteDTO dto) {
         if (clienteRepository.findByDni(dto.getDni()).isPresent()) {
             throw new ValidacionException("Ya existe un cliente con el DNI: " + dto.getDni());
         }
-
         if (clienteRepository.existsByEmail(dto.getEmail())) {
             throw new ValidacionException("Ya existe un cliente con el email: " + dto.getEmail());
         }
-
         if (clienteRepository.existsByTelefono(dto.getTelefono())) {
             throw new ValidacionException("Ya existe un cliente con el teléfono: " + dto.getTelefono());
         }
@@ -42,7 +39,6 @@ public class ClienteServiceImpl implements ClienteService {
         Cliente guardado = clienteRepository.save(cliente);
 
         log.info("Cliente creado con id {}", guardado.getId());
-
         return ClienteMapper.toDTO(guardado);
     }
 
@@ -50,18 +46,14 @@ public class ClienteServiceImpl implements ClienteService {
     @Transactional(readOnly = true)
     public ClienteDTO obtenerCliente(Long id) {
         Cliente cliente = clienteRepository.findById(id)
-                .orElseThrow(() ->
-                        new RecursoNoEncontradoException("Cliente no encontrado con id: " + id)
-                );
-
+                .orElseThrow(() -> new RecursoNoEncontradoException("Cliente no encontrado con id: " + id));
         return ClienteMapper.toDTO(cliente);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<ClienteDTO> listarClientes() {
-        return clienteRepository.findAll()
-                .stream()
+        return clienteRepository.findAll().stream()
                 .map(ClienteMapper::toDTO)
                 .collect(Collectors.toList());
     }

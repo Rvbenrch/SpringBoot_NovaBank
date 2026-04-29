@@ -1,8 +1,13 @@
 package com.novabank.dto;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import java.util.List;
+import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ClienteDTO {
     private Long id;
     private String nombre;
@@ -10,5 +15,6 @@ public class ClienteDTO {
     private String dni;
     private String email;
     private String telefono;
-    private List<CuentaDTO> cuentas; // Para ver sus cuentas al consultar el cliente
+    private LocalDateTime fechaCreacion;
+    private int numeroCuentas;
 }

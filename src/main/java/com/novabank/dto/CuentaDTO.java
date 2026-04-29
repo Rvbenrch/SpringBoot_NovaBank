@@ -1,12 +1,12 @@
 package com.novabank.dto;
+
 import lombok.Data;
-import java.util.List;
+import java.math.BigDecimal;
 
 @Data
 public class CuentaDTO {
     private Long id;
     private String numeroCuenta;
-    private Double saldo;
-    private Long clienteId; // Crucial para el POST desde Postman
-    private List<MovimientoDTO> movimientos; // Se llena solo si consultamos detalle
+    private BigDecimal saldo;
+    private Long clienteId;
 }

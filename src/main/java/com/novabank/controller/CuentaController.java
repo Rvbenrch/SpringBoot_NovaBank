@@ -1,15 +1,17 @@
 package com.novabank.controller;
 
 import com.novabank.dto.CuentaDTO;
-import com.novabank.dto.TransferenciaDTO;
-import com.novabank.dto.OperacionDTO;
+import com.novabank.dto.MovimientoDTO;
 import com.novabank.service.CuentaService;
-import com.novabank.service.OperacionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -18,52 +20,33 @@ import java.util.List;
 public class CuentaController {
 
     private final CuentaService cuentaService;
-    private final OperacionService operacionService;
 
-    // Crear cuenta
     @PostMapping
-    public ResponseEntity<CuentaDTO> crearCuenta(@Valid @RequestBody CuentaCreateDTO dto) {
+    public ResponseEntity<CuentaDTO> crearCuenta(@Valid @RequestBody CuentaDTO dto) {
         CuentaDTO creada = cuentaService.crearCuenta(dto);
-        return ResponseEntity.ok(creada);
+        return ResponseEntity.status(HttpStatus.CREATED).body(creada);
     }
 
-    // Obtener cuenta por ID
     @GetMapping("/{id}")
     public ResponseEntity<CuentaDTO> obtenerCuenta(@PathVariable Long id) {
-        CuentaDTO cuenta = cuentaService.obtenerCuenta(id);
-        return ResponseEntity.ok(cuenta);
+        return ResponseEntity.ok(cuentaService.obtenerCuenta(id));
     }
 
-    // Listar cuentas por cliente
-    @GetMapping("/cliente/{clienteId}")
-    public ResponseEntity<List<CuentaDTO>> listarPorCliente(@PathVariable Long clienteId) {
-        return ResponseEntity.ok(cuentaService.listarCuentasPorCliente(clienteId));
+    @GetMapping("/{id}/saldo")
+    public ResponseEntity<BigDecimal> obtenerSaldo(@PathVariable Long id) {
+        return ResponseEntity.ok(cuentaService.obtenerSaldo(id));
     }
 
-    // Obtener cuenta con movimientos
+    // Maneja tanto la petición normal como la de rango de fechas
     @GetMapping("/{id}/movimientos")
-    public ResponseEntity<CuentaDTO> obtenerCuentaConMovimientos(@PathVariable Long id) {
-        return ResponseEntity.ok(cuentaService.obtenerCuentaConMovimientos(id));
-    }
+    public ResponseEntity<List<MovimientoDTO>> listarMovimientos(
+            @PathVariable Long id,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fechaInicio,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fechaFin) {
 
-    // Depósito
-    @PostMapping("/deposito")
-    public ResponseEntity<String> realizarDeposito(@Valid @RequestBody OperacionDTO dto) {
-        operacionService.realizarDeposito(dto);
-        return ResponseEntity.ok("Depósito realizado correctamente");
-    }
-
-    // Retiro
-    @PostMapping("/retiro")
-    public ResponseEntity<String> realizarRetiro(@Valid @RequestBody OperacionDTO dto) {
-        operacionService.realizarRetiro(dto);
-        return ResponseEntity.ok("Retiro realizado correctamente");
-    }
-
-    // Transferencia
-    @PostMapping("/transferencia")
-    public ResponseEntity<String> realizarTransferencia(@Valid @RequestBody TransferenciaDTO dto) {
-        operacionService.realizarTransferencia(dto);
-        return ResponseEntity.ok("Transferencia realizada correctamente");
+        if (fechaInicio != null && fechaFin != null) {
+            return ResponseEntity.ok(cuentaService.obtenerMovimientosPorFechas(id, fechaInicio, fechaFin));
+        }
+        return ResponseEntity.ok(cuentaService.obtenerMovimientos(id));
     }
 }

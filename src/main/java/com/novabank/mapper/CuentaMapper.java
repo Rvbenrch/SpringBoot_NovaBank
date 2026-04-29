@@ -3,9 +3,8 @@ package com.novabank.mapper;
 import com.novabank.dto.CuentaDTO;
 import com.novabank.model.Cuenta;
 
-import java.math.BigDecimal;
-
 public class CuentaMapper {
+
     public static CuentaDTO toDTO(Cuenta cuenta) {
         CuentaDTO dto = new CuentaDTO();
         dto.setId(cuenta.getId());
@@ -20,7 +19,6 @@ public class CuentaMapper {
     public static Cuenta toEntity(CuentaDTO dto) {
         Cuenta cuenta = new Cuenta();
         cuenta.setNumeroCuenta(dto.getNumeroCuenta());
-        // El cliente se busca y asigna en el Service, no aquí.
         return cuenta;
     }
 }
