@@ -1,10 +1,7 @@
 package com.novabank.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -23,6 +20,8 @@ public class Movimiento {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "cuenta_id", nullable = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Cuenta cuenta;
 
     @Enumerated(EnumType.STRING)

@@ -1,10 +1,7 @@
 package com.novabank.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -33,9 +30,13 @@ public class Cuenta {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "cliente_id", nullable = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Cliente cliente;
 
     @OneToMany(mappedBy = "cuenta", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private List<Movimiento> movimientos;
 
     @PrePersist
