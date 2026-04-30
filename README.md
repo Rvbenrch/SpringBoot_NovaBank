@@ -1,10 +1,31 @@
 # NovaBank Spring Boot
-## Introducción
+
+# Índice
+
+# Índice
+
+- [Introducción](#introducción)
+- [Tecnologías Utilizadas](#tecnologías-utilizadas)
+- [Requisitos del sistema](#requisitos-del-sistema)
+- [Arquitectura y Principios](#arquitectura-y-principios)
+- [Configuración Base de Datos](#configuración-base-de-datos)
+- [Ejecución de la Aplicación](#ejecución-de-la-aplicación)
+- [Documentación y seguridad](#documentación-y-seguridad)
+    - [Obtención del Token JWT](#obtención-del-token-jwt)
+- [Testing](#testing)
+- [Arquitectura basada en principios solid](#arquitectura-basada-en-principios-solid)
+- [Información Importante](#información-importante)
+    - [Autor](#autor)
+    - [Aviso legal y Licencia de uso](#aviso-legal-y-licencia-de-uso)
+---
+# Introducción
 NovaBank es una API REST desarrollada con Spring Boot para la gestión de un sistema
 bancario básico. Permite la administración de clientes, cuentas bancarias y la realización 
 de operaciones financieras (depósitos, retiros y transferencias), se garantiza la consistencia
 de los datos y la seguridad de los mismos a través de autentificación JWT.
-## Tecnologías Utilizadas
+---
+
+# Tecnologías Utilizadas
 * **Java 17**
 * **Spring Boot 3**: Se ha usado Web, Data JPA, Security y validation.
 * **Spring Security & JWT**: Autentificación y Autorización.
@@ -15,7 +36,19 @@ de los datos y la seguridad de los mismos a través de autentificación JWT.
 *  **Lombok**: Reducción de código boilerplate.
 * **Maven 3.6+**: Gestión de dependencias.
 
-## Arquitectura y Principios
+
+# Requisitos del sistema
+
+Para ejecutar el proyecto localmente se requiere:
+
+- **Java 17 o superior**
+- **Maven 3.6 o superior**
+- **PostgreSQL 14 o superior**
+- **Postman** (opcional, para probar la API)
+
+---
+
+# Arquitectura y Principios
 El proyecto sigue una arquitectura multicapa y respeta los principios **Solid**, 
 lo que garantiza un código limpio, escalable y mantenible. Se ha implementado **DTO** para
 aislar el modelo de la base de datos de los datos expuestos en los endpoints.
@@ -32,19 +65,26 @@ aislar el modelo de la base de datos de los datos expuestos en los endpoints.
 
 Además, al incluir el controlador de excepciones global, `GlobalExceptionHandler` sirve para estandarizar las respuestas de error, `401`, `403`,`404`, etc.
 
-## Configuración Base de Datos
-Asegurarse de tener PostgreSQL instalado y ejecutándos. Actualizamos el archivo `src/main/resources/application.yml`
-con las credenciales:
-* **Gestor de base de datos**: PostgreSQL.
-* **Configuración clave**:
+---
+
+# Configuración Base de Datos
+
+Antes de iniciar la aplicación necesitamos crear la base de datos, en la consola de PostgreSQL escribimos lo siguiente:
+```bash
+CREATE DATABASE novabank;
+```
+Después, hay que configurar el archivo `src/main/resources/application.yml`, con las credenciales del entorno.
+
+<details><summary>Desplegar información de application.yml </summary>
+
 ```bash
 spring:
   application:
-    name: novabank-api
+    name: novabank-api #Poner aqui el nombre de vuestra aplicación creada.
 
   datasource:
     url: jdbc:postgresql://localhost:5432/novabank
-    username: postgres
+    username: postgres #El usuario que hayas
     password: tu_contraseña_aqui  # Asegúrate de que coincida con tu Postgres local
     driver-class-name: org.postgresql.Driver
 
@@ -81,7 +121,9 @@ springdoc:
     path: /v3/api-docs
 ```
 
-## Ejecución de la Aplicación
+</details>
+
+# Ejecución de la Aplicación
 Para levantar la API, se puede usar la terminal y poner:
 ```bash
 mvn spring-boot:run
@@ -90,23 +132,71 @@ La aplicación está disponible (si no se ha cambiado el puerto), desde
 ```bash
 http://localhost:8081
 ```
-## Documentación y seguridad
+# Documentación y seguridad
 La API está documentada de forma interactiva con **Swagger UI**. Para tener acceso:
 ```bash
 http://localhost:8081/swagger-ui.html
 ```
-Como hacer uso de la aplicación bien en **Postman (recomendado)** o con **Swagge**.
+## Obtención del Token JWT
+La API utiliza autenticación en  **JWT** para proteger los endpoints restringidos. A continuación, se explica como hacer uso de la aplicación bien en **Postman (recomendado)** o con **Swagger**.
+
 
 1. Localizamos le **endpoint** `POST /login`, usamos las credenciales designadas para el proyecto `"username":admin`, `"password":password`.
 2. Se autogenera un **Token JWT** que será el que debemos de usar para Autorizar el resto de endpoints
 3. En **Swagger**, en la parte superior lo pegamos en authorize, con el siguiente formato, respetando el espacio y sin comillas.
-```bash
-Bearer <Token>
+   El endpoint de autenticación es:
+
+```http
+POST http://localhost:8081/login
+```
+
+El cuerpo de la petición debe enviarse en formato JSON con la siguiente estructura:
+
+```json
+{
+  "username": "admin",
+  "password": "password"
+}
+```
+
+Estas credenciales están definidas actualmente en el servicio de autenticación de la aplicación.
+
+Si la autenticación es correcta, la API devuelve una respuesta similar a esta:
+
+```json
+{
+  "token": "jwt_generado",
+  "tipo": "Bearer",
+  "expiracion": 1710000000000
+}
+```
+### Incluir el token en las peticiones
+
+Para acceder a los endpoints protegidos, el token debe enviarse en la cabecera `Authorization` con este formato:
+
+```http
+Authorization: Bearer <token>
 ```
 Mientras, en **Postman** buscamos la pestaña authorization y pegamos el token.
-4. Una vez Autorizado podremos probar el resto de la API.
+### Uso en Swagger
 
-## Testing
+En Swagger UI, pulsa en **Authorize** e introduce el token con el siguiente formato:
+
+```text
+Bearer <token>
+```
+
+### Uso en Postman
+
+En Postman, el token puede incluirse desde la pestaña **Authorization** o manualmente en la cabecera:
+
+```http
+Authorization: Bearer <token>
+```
+
+---
+
+# Testing
 Se ha implementado una estrategia de Testing exhaustiva dividida en 4 niveles para asegurar la fiabilidad de las operaciones bancarias:
 1. **Test Unitarios**: Lógica de negocio de los servicios (Mockito).
 2. **Test de Repositorios**: Consultas y persistencia (H2 Database).
@@ -120,33 +210,46 @@ mvn test
 
 ![TodosLosTestPasados](img.png)
 
-## Arquitectura basada en principios **SOLID**
-El proyecto sigue una arquitectura multicapa basada en los principios SOLID:
-1. Controller: Gestiona las peticiones HTTP y validación de entrada.
-2. Service: Implementa la lógica de negocio e interfaces.
-3. Repository: Capa de acceso a datos.
-4. Model y DTO: Entidades de persistencia y objetos de transferencia de datos.
-5. Exception: Manejo global de errores y excepciones personalizadas.
+---
 
+## Arquitectura del sistema
+
+El proyecto sigue una **arquitectura multicapa**, separando responsabilidades en distintas capas para mejorar la mantenibilidad, la escalabilidad y la claridad del código.
+
+### Estructura de paquetes
+
+- `controller`: expone los endpoints REST y gestiona las peticiones HTTP.
+- `service`: contiene la lógica de negocio y los contratos de servicio.
+- `repository`: proporciona el acceso a datos mediante Spring Data JPA.
+- `model`: define las entidades persistentes de la base de datos.
+- `dto`: encapsula los datos de entrada y salida de la API.
+- `mapper`: transforma entidades en DTOs y viceversa.
+- `security`: agrupa la configuración de seguridad y la gestión JWT.
+- `config`: contiene configuraciones generales de la aplicación.
+- `exception`: centraliza el manejo de errores y excepciones personalizadas.
+
+Además, el proyecto incorpora un manejador global de excepciones para estandarizar las respuestas de error de la API, incluyendo códigos como `401`, `403` y `404`.
 
 ---
-# Información Importante
+
+## Repositorio público
+
+Repositorio del proyecto en GitHub:
+
+[https://github.com/Rvbenrch/SpringBoot_NovaBank](https://github.com/Rvbenrch/SpringBoot_NovaBank)
 
 ---
+
 ## Autor
-Rubén Manuel Rodríguez Chamorro, estudiante de Ingeniería de la Salud, especializado en Bioinformática es el dueño y autor
-de este proyecto, realizado en la empresa NTT-DATA elaborado para el completar el plan formativo.
+
+Rubén Manuel Rodríguez Chamorro, estudiante de Ingeniería de la Salud, especializado en Bioinformática, es el autor de este proyecto, desarrollado en la empresa NTT DATA como parte del plan formativo.
 
 ---
 
----
+## Aviso legal y licencia de uso
 
-## Aviso legal y Licencia de uso
-Este proyecto ha sido desarrollado exclusivamente con **fines educativos y académicos**, como parte del programa de formación 
-**NTT-DATA**.
+Este proyecto ha sido desarrollado exclusivamente con fines educativos y académicos, como parte del programa de formación de **NTT DATA**.
 
-El código contenido en este repositorio no está diseñado ni testado para su uso en entornos de producción reales, especialmente en sistemas 
-financieros críticos. El autor no se hace responsable del mal uso de esta aplicación.
+El código contenido en este repositorio no está diseñado ni validado para su uso en entornos de producción reales, especialmente en sistemas financieros críticos. El autor no se hace responsable del mal uso de esta aplicación.
 
-Queda prohibida la reproducción total o parcial, publicación, modificación o distribución de este software con fines comerciales sin el consentimiento explícito y por escrito del autor.
-Todos los derechos están reservados. El uso de este material fuera del ámbito evaluativo de la formación backend debe ser consultado previamente.
+Queda prohibida la reproducción total o parcial, publicación, modificación o distribución de este software con fines comerciales sin el consentimiento explícito y por escrito del autor. Todos los derechos están reservados. El uso de este material fuera del ámbito evaluativo de la formación backend debe ser consultado previamente.
